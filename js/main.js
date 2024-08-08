@@ -9,7 +9,7 @@ if (localStorage.getItem('countries') !== null) {
 }
 displayItems();
 buttonDOM.addEventListener('click', () => {
-    enterDOM.value.trim().length === 0 ? '' : data.push(enterDOM.value);
+    enterDOM.value.trim().length === 0 ? alert("Input can't be empty") : data.push({ id: 'id_' + new Date(), text: enterDOM.value });
     enterDOM.value = '';
     localStorage.setItem('countries', JSON.stringify(data));
     displayItems();
@@ -20,18 +20,20 @@ searchDOM.addEventListener('input', () => {
 function displayItems() {
     let HTML = '';
     for (const item of data) {
-        if (item.toLowerCase().includes(searchDOM.value.toLowerCase())) {
-            HTML += `<li>${item} 
-            <button>X</button>
-            </li>`
+        if (item.text.toLowerCase().includes(searchDOM.value.toLowerCase())) {
+            HTML += `
+            <li>
+                <p>${item.text}</p> 
+                <button id="${item.id}">X</button>
+            </li>`;
         }
     }
     listDOM.innerHTML = HTML;
-    const listBtnsDOM = document.querySelectorAll('.list button');
+    const listBtnsDOM = listDOM.querySelectorAll('button');
 
     for (let i = 0; i < listBtnsDOM.length; i++) {
         listBtnsDOM[i].addEventListener('click', () => {
-            data.splice(i, 1);
+            data = data.filter(item => item.id !== listBtnsDOM[i].id)
             localStorage.setItem('countries', JSON.stringify(data));
             displayItems();
         })
