@@ -15,14 +15,25 @@ buttonDOM.addEventListener('click', () => {
     displayItems();
 })
 searchDOM.addEventListener('input', () => {
-    displayItems(searchDOM.value);
+    displayItems();
 })
-function displayItems(search = '') {
+function displayItems() {
     let HTML = '';
     for (const item of data) {
         if (item.toLowerCase().includes(searchDOM.value.toLowerCase())) {
-            HTML += `<li>${item}</li>`
+            HTML += `<li>${item} 
+            <button>X</button>
+            </li>`
         }
     }
     listDOM.innerHTML = HTML;
+    const listBtnsDOM = document.querySelectorAll('.list button');
+
+    for (let i = 0; i < listBtnsDOM.length; i++) {
+        listBtnsDOM[i].addEventListener('click', () => {
+            data.splice(i, 1);
+            localStorage.setItem('countries', JSON.stringify(data));
+            displayItems();
+        })
+    }
 }
